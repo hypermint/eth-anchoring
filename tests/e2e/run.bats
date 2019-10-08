@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bats
 
 @test "current state is uninitialized" {
   run ${ANCHOR} l1 latest --mnemonic="${MNEMONIC}" --hdw-path="${HDW_PATH}"
