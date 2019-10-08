@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"eth-anchoring/pkg/cmd"
 
@@ -20,5 +21,6 @@ func main() {
 	)
 	if err := rootCmd.Execute(); err != nil {
 		log.Println(err)
+		os.Exit(1)
 	}
 }
