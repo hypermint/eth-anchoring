@@ -14,4 +14,4 @@ tools:
 	cd tools && git clone https://github.com/sstephenson/bats.git
 
 test:
-	ANCHOR=$(ANCHOR) MNEMONIC="$(MNEMONIC)" HDW_PATH="$(HDW_PATH)/0" $(BATS) run.sh
+	ANCHOR=$(ANCHOR) MNEMONIC="$(MNEMONIC)" HDW_PATH="$(HDW_PATH)/0" $(BATS) run.bats
