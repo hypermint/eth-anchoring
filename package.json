@@ -1,21 +1,21 @@
 {
-    "name": "eth-anchoring",
-    "version": "1.0.0",
-    "main": "index.js",
-    "author": "Jun Kimura <jun.kimura@speee.jp>",
-    "license": "APACHE2",
-    "devDependencies": {
-      "ejs": "^2.6.1",
-      "ganache-cli": "^6.4.3",
-      "truffle": "5.0.2",
-      "truffle-hdwallet-provider": "^1.0.10"
-    },
-    "dependencies": {
-      "openzeppelin-solidity": "~2.1.2"
-    },
-    "scripts": {
-      "truffle": "truffle",
-      "ganache": "ganache-cli"
-    }
+  "name": "eth-anchoring",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Jun Kimura <jun.kimura@speee.jp>",
+  "license": "APACHE2",
+  "devDependencies": {
+    "ejs": "^2.6.1",
+    "ganache-cli": "^6.4.3",
+    "truffle": "5.0.2",
+    "truffle-hdwallet-provider": "^1.0.10",
+    "diff": "^3.5.0"
+  },
+  "dependencies": {
+    "openzeppelin-solidity": "~2.1.2"
+  },
+  "scripts": {
+    "truffle": "truffle",
+    "ganache": "ganache-cli"
   }
-  
+}
