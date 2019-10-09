@@ -45,6 +45,9 @@ func MakeSubmitCMD() *cobra.Command {
 				viper.GetString(flagHDWPath),
 				viper.GetString(flagL1Address),
 			)
+			if err != nil {
+				return err
+			}
 			l2 := chain.NewL2Client(viper.GetString(flagL2Address))
 
 			ctx := context.Background()
