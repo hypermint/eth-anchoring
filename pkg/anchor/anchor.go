@@ -10,6 +10,7 @@ import (
 	"eth-anchoring/pkg/logger"
 	"eth-anchoring/pkg/types"
 
+	"github.com/ethereum/go-ethereum/common"
 	tmtypes "github.com/tendermint/tendermint/types"
 )
 
@@ -36,8 +37,8 @@ func NewAnchoringService(
 	return &AnchoringService{logger: logger, l2: l2, cc: cc, signer: signer, option: option}
 }
 
-// DoOneShot performs a one-shot block submission
-func (a *AnchoringService) DoOneShot(ctx context.Context, height int64) error {
+// DoAndhorWithHeight performs a one-shot block submission with specified height
+func (a *AnchoringService) DoAnchorWithHeight(ctx context.Context, height int64) error {
 	blocks, err := a.getBlocks(height, 1)
 	if err != nil {
 		return err
@@ -50,6 +51,21 @@ func (a *AnchoringService) DoOneShot(ctx context.Context, height int64) error {
 		return err
 	}
 	return nil
+}
+
+// DoAnchorWithHashes performs a one-shot block submission with block hashes
+func (a *AnchoringService) DoAnchorWithHashes(ctx context.Context, height int64, hashes []common.Hash) error {
+	s, err := types.MakeSubmissionWithHashes(uint64(height), hashes)
+	if err != nil {
+		return err
+	}
+	if err := s.SignWith(a.signer.Sign); err != nil {
+		return err
+	}
+	if err := s.Validate(); err != nil {
+		return err
+	}
+	return a.doSubmit(ctx, s)
 }
 
 // Start starts a anchoring service. This service observe block store at L2, and submit its updates to l1 contract

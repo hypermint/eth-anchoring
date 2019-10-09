@@ -86,12 +86,20 @@ type SubmissionBlockHeader struct {
 }
 
 func MakeSubmission(height uint64, blocks []*types.Block) (*Submission, error) {
+	var hashes []common.Hash
+	for _, b := range blocks {
+		hashes = append(hashes, common.BytesToHash(b.Hash()))
+	}
+	return MakeSubmissionWithHashes(height, hashes)
+}
+
+func MakeSubmissionWithHashes(height uint64, hashes []common.Hash) (*Submission, error) {
 	s := new(Submission)
 	binary.BigEndian.PutUint64(s.Height[:], height)
-	for _, b := range blocks {
+	for _, h := range hashes {
 		s.BlockHeaders = append(
 			s.BlockHeaders, SubmissionBlockHeader{
-				MerkleRootHash: common.BytesToHash(b.Hash()),
+				MerkleRootHash: h,
 			},
 		)
 	}

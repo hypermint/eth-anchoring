@@ -9,6 +9,7 @@ import (
 	"eth-anchoring/pkg/wallet"
 	"fmt"
 
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -21,6 +22,7 @@ func MakeSubmitCMD() *cobra.Command {
 		flagHDWPath   = "hdw-path"
 
 		flagHeight = "height"
+		flagHashes = "hashes"
 	)
 
 	var submitCmd = &cobra.Command{
@@ -52,7 +54,12 @@ func MakeSubmitCMD() *cobra.Command {
 
 			ctx := context.Background()
 			srv := anchor.NewAnchoringService(logger.With("module", "anchoring_service"), l2, cc, ptypes.NewSigner(prv))
-			return srv.DoOneShot(ctx, height)
+
+			if hashes := viper.GetStringSlice(flagHashes); len(hashes) == 0 {
+				return srv.DoAnchorWithHeight(ctx, height)
+			} else {
+				return srv.DoAnchorWithHashes(ctx, height, hexStrSliceToHashes(hashes))
+			}
 		},
 	}
 
@@ -61,6 +68,15 @@ func MakeSubmitCMD() *cobra.Command {
 	submitCmd.Flags().String(flagMnemonic, "", "mnemonic string")
 	submitCmd.Flags().String(flagHDWPath, "", "HD Wallet path")
 
-	submitCmd.Flags().Uint64(flagHeight, 0, "")
+	submitCmd.Flags().Uint64(flagHeight, 0, "block height")
+	submitCmd.Flags().StringSlice(flagHashes, nil, "array of block hash")
 	return submitCmd
+}
+
+func hexStrSliceToHashes(strs []string) []common.Hash {
+	var hs []common.Hash
+	for _, s := range strs {
+		hs = append(hs, common.HexToHash(s))
+	}
+	return hs
 }
